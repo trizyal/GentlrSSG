@@ -1,0 +1,3 @@
+[submodule "src/external/md4c"]
+	path = src/external/md4c
+	url = git@github.com:mity/md4c.git
