@@ -10,6 +10,7 @@ class Page
     std::string title;
     std::string content;
     std::string filename;
+    std::string layout;
 
     int readPage(const std::string& filename);
     int writePage(const std::string& filename);
