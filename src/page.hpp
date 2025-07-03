@@ -12,8 +12,8 @@ class Page
     std::string filename;
     std::string layout;
 
-    int readPage(const std::string& filename);
-    int writePage(const std::string& filename);
+    int readPageMarkdown(const std::string& filename);
+    int writePageHTML(const std::string& filename);
 };
 
 #endif //PAGE_HPP

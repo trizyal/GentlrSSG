@@ -1,7 +1,7 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <cpptoml/cpptoml.h>
+#include <string>
 
 class Config
 {
