@@ -3,19 +3,17 @@
 
 #include <string>
 
+#include "utils/site.hpp"
+
+
+/// @brief Represents the configuration for a site, including metadata and theme settings.
 class Config
 {
     public:
 
-    std::string siteUrl;
-    std::string siteName;
-    std::string siteDescription;
-    std::string siteLogo;
+    Site site;
 
-    std::string authorName;
-    std::string authorEmail;
-    std::string authorGitHub;
-    std::string authorLinkedIn;
+
 
     std::string theme;
 

@@ -3,6 +3,8 @@
 
 #include <string>
 
+
+/// @brief Represents a page with title, content, filename, and layout.
 class Page
 {
     public:

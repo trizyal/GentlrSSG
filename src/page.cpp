@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+
+/// @brief Reads a Markdown file and extracts the title and content.
 int Page::readPageMarkdown(const std::string& filename)
 {
     std::ifstream file(filename);
