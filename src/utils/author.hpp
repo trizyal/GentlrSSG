@@ -8,14 +8,11 @@
 
 /// @brief Represents an author with name, email, and links to social profiles.
 class Author {
+public:
     std::string name;
     std::string email;
     Link github;
     Link linkedin;
-
-public:
-    Author()
-        : name(""), email("") {}
 
     int setName(const std::string& aName) {
         if (aName.empty()) {

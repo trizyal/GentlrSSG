@@ -6,6 +6,7 @@
 /// @brief Represents a site with basic metadata.
 class Site
 {
+public:
     std::string name;
     std::string description;
     std::string logoPath;

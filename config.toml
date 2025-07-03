@@ -1,0 +1,45 @@
+# Gentlr SSG Configuration File
+
+# --------------------------------------------------------------
+# Website Metadata
+# --------------------------------------------------------------
+title = "My Gentlr Site"
+description = "A simple static site generated with Gentlr"
+url = ""
+logo = ""
+
+# --------------------------------------------------------------
+# Author
+# --------------------------------------------------------------
+[author]
+name = "hades"
+email = "example@example.com"
+socials = [
+    { title = "GitHub", url = "github.com", icon = "" },
+    { title = "LinkedIn", url = "linkedin.com", icon = "" }
+]
+
+# --------------------------------------------------------------
+# Paths
+# --------------------------------------------------------------
+[paths]
+pages = "pages"
+templates = "templates"
+build = "build"
+output = "site"
+
+# --------------------------------------------------------------
+# Theme and Appearance
+# --------------------------------------------------------------
+[template]
+theme = "default"
+
+# --------------------------------------------------------------
+# Navigation
+# --------------------------------------------------------------
+[nav]
+links = [
+    { title = "Home", url = "/" },
+    { title = "About", url = "/about/" },
+    { title = "Contact", url = "/#contact" }
+]

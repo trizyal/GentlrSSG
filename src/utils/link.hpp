@@ -7,11 +7,11 @@
 /// Represents a hyperlink with a URL, label, and optional icon.
 class Link
 {
+public:
     std::string url;
     std::string label;
     std::string icon; // Optional icon
 
-    public:
     Link( )
         : url(""), label(""), icon("") {}
 

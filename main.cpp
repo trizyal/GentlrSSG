@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "page.hpp"
+#include "config.hpp"
 
 int main()
 {
@@ -8,8 +9,11 @@ int main()
 
     try
     {
+        Config config;
+        config.loadConfig("../config.toml");
+
         Page page;
-        page.readPageMarkdown("../pages/example.md");
+        page.readPageMarkdown("../pages/gentlr.md");
     }
     catch (const std::runtime_error& e)
     {
