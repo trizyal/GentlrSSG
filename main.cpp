@@ -1,24 +1,34 @@
+#include <filesystem>
 #include <iostream>
 
-#include "page.hpp"
 #include "config.hpp"
+#include "siteBuilder.hpp"
 
 int main()
 {
-    std::cout << "Gentlr Static Site Generator" << std::endl;
-
     try
     {
+        // Load the configuration file
         Config config;
         config.loadConfig("../config.toml");
         config.printConfig();
 
-        Page page;
-        page.readPageMarkdown("../pages/gentlr.md");
+        // Read pages
+        SiteBuilder::buildSite(config);
+    }
+    catch (const std::filesystem::filesystem_error& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
     catch (const std::runtime_error& e)
     {
-        std::cerr << "Error reading page: " << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
 

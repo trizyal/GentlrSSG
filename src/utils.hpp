@@ -6,6 +6,13 @@
 
 
 
+struct Site
+{
+    std::string name;
+    std::string description;
+    std::string logoPath;
+};
+
 struct Link
 {
     std::string url;
@@ -23,13 +30,6 @@ struct Navigation
 {
     std::string label;
     std::string url;
-};
-
-struct Site
-{
-    std::string name;
-    std::string description;
-    std::string logoPath;
 };
 
 

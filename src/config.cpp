@@ -18,9 +18,9 @@ void Config::printConfig() const
     std::cout << "Author Name: " << this->author.name << std::endl;
     std::cout << "Author Email: " << this->author.email << std::endl;
     std::cout << "Author Socials: "<< this->author.socials.size() << std::endl;
-    for (const auto& social : this->author.socials)
+    for (const auto& [url, label, icon] : this->author.socials)
     {
-        std::cout << "  - " << social.label << ": " << social.url << " (Icon: " << social.icon << ")" << std::endl;
+        std::cout << "  - " << label << ": " << url << " (Icon: " << icon << ")" << std::endl;
     }
 
     // Paths
@@ -33,9 +33,9 @@ void Config::printConfig() const
 
     // Navigation
     std::cout << "Navigation Links: " << this->navigation.size() <<std::endl;
-    for (const auto& navLink : this->navigation)
+    for (const auto& [label, url] : this->navigation)
     {
-        std::cout << "  - " << navLink.label << ": " << navLink.url << std::endl;
+        std::cout << "  - " << label << ": " << url << std::endl;
     }
 }
 
@@ -57,8 +57,7 @@ int Config::loadConfig(const std::string& configPath)
         this->author.email = *author->get_as<std::string>("email");
 
         // Get array of tables (socials)
-        auto socials = author->get_table_array("socials");
-        if (socials) {
+        if (const auto socials = author->get_table_array("socials")) {
             for (const auto& entry : *socials) {
                 Link socialLink;
                 socialLink.label = *entry->get_as<std::string>("label");

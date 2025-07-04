@@ -11,4 +11,4 @@ target_include_directories(
         gentlr_lib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
-target_link_libraries(gentlr PRIVATE gentlr_lib)
+target_link_libraries(gentlr PUBLIC gentlr_lib)
