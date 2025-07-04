@@ -1,55 +1,9 @@
+@import url(fonts.css);
 
-/* ia-writer-mono-latin-400-normal */
-@font-face {
-    font-family: "iA Writer Mono";
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-    src: url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-400-normal.woff2)
-    format("woff2"),
-    url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-400-normal.woff)
-    format("woff");
-}
-
-/* ia-writer-mono-latin-700-normal */
-@font-face {
-    font-family: "iA Writer Mono";
-    font-style: normal;
-    font-display: swap;
-    font-weight: 700;
-    src: url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-700-normal.woff2)
-    format("woff2"),
-    url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-700-normal.woff)
-    format("woff");
-}
-
-/* ia-writer-mono-latin-400-italic */
-@font-face {
-    font-family: "iA Writer Mono";
-    font-style: italic;
-    font-display: swap;
-    font-weight: 400;
-    src: url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-400-italic.woff2)
-    format("woff2"),
-    url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-400-italic.woff)
-    format("woff");
-}
-
-/* ia-writer-mono-latin-700-italic */
-@font-face {
-    font-family: "iA Writer Mono";
-    font-style: italic;
-    font-display: swap;
-    font-weight: 700;
-    src: url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-700-italic.woff2)
-    format("woff2"),
-    url(https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-700-italic.woff)
-    format("woff");
-}
-
-. {
-    padding: 0;
-    margin: 0;
+:root {
+    --color-bg: #252527;
+    --color-text: #FAEBD7;
+    --color-text-secondary: #A4A2A0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -58,8 +12,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-    background-color: #252527;
-    color: antiquewhite;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     padding: 2em;
     text-align: center;
 }
@@ -73,19 +27,33 @@ code {
 }
 
 header {
+    text-align: center;
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
     padding-top: 2em;
     padding-bottom: 2em;
 }
 
 a {
     text-decoration: underline;
-    color: antiquewhite;
+    color: var(--color-text);
     text-decoration-thickness: 0.3ex;
     text-underline-offset: 0.3ex;
 }
 
+a:hover {
+    text-decoration-thickness: 0.4ex;
+    font-weight: bold;
+}
+
 .title {
     padding-bottom: 16px;
+}
+
+.subtitle {
+    color: var(--color-text-secondary);
+    text-align: left;
 }
 
 nav {
