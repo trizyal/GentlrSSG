@@ -11,6 +11,7 @@ int main()
     {
         Config config;
         config.loadConfig("../config.toml");
+        config.printConfig();
 
         Page page;
         page.readPageMarkdown("../pages/gentlr.md");

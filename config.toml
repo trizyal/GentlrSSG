@@ -5,8 +5,8 @@
 # --------------------------------------------------------------
 title = "My Gentlr Site"
 description = "A simple static site generated with Gentlr"
-url = ""
-logo = ""
+url = "url/test"
+logo = "logo/test"
 
 # --------------------------------------------------------------
 # Author
@@ -15,8 +15,8 @@ logo = ""
 name = "hades"
 email = "example@example.com"
 socials = [
-    { title = "GitHub", url = "github.com", icon = "" },
-    { title = "LinkedIn", url = "linkedin.com", icon = "" }
+    { label = "GitHub", url = "github.com", icon = "" },
+    { label = "LinkedIn", url = "linkedin.com", icon = "" }
 ]
 
 # --------------------------------------------------------------
@@ -25,7 +25,6 @@ socials = [
 [paths]
 pages = "pages"
 templates = "templates"
-build = "build"
 output = "site"
 
 # --------------------------------------------------------------
@@ -39,7 +38,7 @@ theme = "default"
 # --------------------------------------------------------------
 [nav]
 links = [
-    { title = "Home", url = "/" },
-    { title = "About", url = "/about/" },
-    { title = "Contact", url = "/#contact" }
+    { label = "Home", url = "/" },
+    { label = "About", url = "/about/" },
+    { label = "Contact", url = "/#contact" }
 ]

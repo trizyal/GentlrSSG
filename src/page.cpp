@@ -64,10 +64,3 @@ int Page::readPageMarkdown(const std::string& filename)
 
     return 0;
 }
-
-
-
-int Page::writePageHTML(const std::string& filename)
-{
-    return 0;
-}
