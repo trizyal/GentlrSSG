@@ -1,3 +1,10 @@
++++
+title = "Gentlr Static Site Generator"
+description = "A simple static site generator written in C++."
+layout = "base"
+permalink = "/"
++++
+
 # Gentlr Static Site Generator
 
 - Written in C++

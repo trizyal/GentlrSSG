@@ -70,9 +70,19 @@ int Config::loadConfig(const std::string& configPath)
 
     // paths
     if (const auto paths_tbl = config->get_table("paths")) {
+        // add ../ before the paths to make them relative to the config file
         this->pagesPath = *paths_tbl->get_as<std::string>("pages");
+        // if (!this->pagesPath.starts_with("../")) {
+        //     this->pagesPath = "../" + this->pagesPath;
+        // }
         this->templatesPath = *paths_tbl->get_as<std::string>("templates");
+        // if (!this->templatesPath.starts_with("../")) {
+        //     this->templatesPath = "../" + this->templatesPath;
+        // }
         this->sitePath = *paths_tbl->get_as<std::string>("output");
+        // if (!this->sitePath.starts_with("../")) {
+        //     this->sitePath = "../" + this->sitePath;
+        // }
     }
 
     // template / theme

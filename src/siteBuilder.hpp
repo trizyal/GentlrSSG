@@ -6,6 +6,8 @@
 class SiteBuilder
 {
 public:
+    static std::string rootPath;
+
     static void buildSite(const Config& config);
 
     static int checkPaths(const Config& config);
