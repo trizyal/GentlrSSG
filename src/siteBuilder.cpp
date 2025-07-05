@@ -26,7 +26,12 @@ void SiteBuilder::buildSite(const Config& config)
     const std::filesystem::path exe_path = std::string(result, (count > 0) ? count : 0);
 
     rootPath = exe_path.parent_path().parent_path();
+
+#ifdef _WIN32
+    rootPath.append("\\");
+#else
     rootPath.append("/");
+#endif
 
     checkPaths(config);
     readPages(config);
