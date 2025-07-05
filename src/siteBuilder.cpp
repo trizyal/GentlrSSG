@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -30,7 +31,7 @@ void SiteBuilder::buildSite(const Config& config)
     std::string templatePath = config.templatesPath;
 #ifdef _WIN32
     rootPath.append("\\");
-    chosenThemePath.append("\\");
+    templatePath.append("\\");
 #else
     rootPath.append("/");
     templatePath.append("/");
