@@ -3,10 +3,10 @@
 #include <filesystem>
 #include <iostream>
 
-#ifdef __linux__
-    #include <unistd.h>
-#elif defined(_WIN32)
+#ifdef _WIN32
     #include <windows.h>
+#else
+    #include <unistd.h>
 #endif
 
 #define PATH_MAX_2 4096
@@ -18,7 +18,7 @@ void SiteBuilder::buildSite(const Config& config)
     char result[PATH_MAX_2];
 
 #ifdef _WIN32
-    DWORD count = GetModuleFileNameA(NULL, result, PATH_MAX);
+    DWORD count = GetModuleFileNameA(NULL, result, PATH_MAX_2);
 #else
     const ssize_t count = readlink("/proc/self/exe", result, PATH_MAX_2);
 #endif
