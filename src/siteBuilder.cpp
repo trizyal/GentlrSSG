@@ -2,7 +2,12 @@
 
 #include <filesystem>
 #include <iostream>
-#include <unistd.h>
+
+#ifdef __linux__
+    #include <unistd.h>
+#elif defined(_WIN32)
+    #include <windows.h>
+#endif
 
 #define PATH_MAX 4096
 
@@ -11,7 +16,13 @@
 void SiteBuilder::buildSite(const Config& config)
 {
     char result[PATH_MAX];
+
+#ifdef _WIN32
+    DWORD count = GetModuleFileNameA(NULL, result, PATH_MAX);
+#else
     const ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+#endif
+
     const std::filesystem::path exe_path = std::string(result, (count > 0) ? count : 0);
 
     rootPath = exe_path.parent_path().parent_path();

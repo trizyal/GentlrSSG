@@ -4,8 +4,8 @@
 #include <unordered_map>
 
 #include "config.hpp"
+#include "htmlTemplate.hpp"
 #include "page.hpp"
-#include "HTMLTemplate.hpp"
 
 class SiteBuilder
 {
@@ -13,7 +13,7 @@ public:
     std::string rootPath;
 
     std::unordered_map<std::string, Page> pages;
-    std::unordered_map<std::string, HTMLTemplate> htmlTemplates;
+    std::unordered_map<std::string, htmlTemplate> htmlTemplates;
 
     void buildSite(const Config& config);
 
