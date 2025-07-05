@@ -19,14 +19,15 @@ class Page
     std::string date;
     std::string permalink;
 
-    // Markdown Content
-    std::string content;
+    // Markdown Content in HTML
+    std::string htmlContent;
 
 
     void readPage(const std::string& filename);
 
     static std::pair<std::string, std::string> extractTomlAndMarkdown(const std::string& filename);
-    void getMetadata(const std::string &tomlContent);
+    void setMetadata(const std::string &tomlContent);
+    void markdownToHtml(const std::string& md);
 
 };
 

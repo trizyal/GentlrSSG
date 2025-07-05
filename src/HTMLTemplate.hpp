@@ -3,7 +3,7 @@
 
 #include <string>
 
-class Template
+class HTMLTemplate
 {
 
 };
