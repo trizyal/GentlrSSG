@@ -1,4 +1,4 @@
-name: Linux (Ubuntu) Build
+name: Linux (Ubuntu) Build Status
 
 on:
   push:

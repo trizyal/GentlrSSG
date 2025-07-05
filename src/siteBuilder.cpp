@@ -9,23 +9,23 @@
     #include <windows.h>
 #endif
 
-#define PATH_MAX 4096
+#define PATH_MAX_2 4096
 
 
 
 void SiteBuilder::buildSite(const Config& config)
 {
-    char result[PATH_MAX];
+    char result[PATH_MAX_2];
 
 #ifdef _WIN32
     DWORD count = GetModuleFileNameA(NULL, result, PATH_MAX);
 #else
-    const ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+    const ssize_t count = readlink("/proc/self/exe", result, PATH_MAX_2);
 #endif
 
     const std::filesystem::path exe_path = std::string(result, (count > 0) ? count : 0);
 
-    rootPath = exe_path.parent_path().parent_path();
+    rootPath = exe_path.parent_path().parent_path().string();
 
 #ifdef _WIN32
     rootPath.append("\\");
@@ -52,7 +52,7 @@ void SiteBuilder::readPages(const Config& config)
         if (entry.is_regular_file() && entry.path().extension() == ".md")
         {
             Page page;
-            page.readPage(entry.path());
+            page.readPage(entry.path().string());
             pages[page.filename] = page;
         }
     }
