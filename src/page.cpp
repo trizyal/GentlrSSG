@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 #include <cpptoml/cpptoml.h>
+#include <md4c/src/md4c-html.h>
+#include <md4c/src/md4c.h>
 
 
 
@@ -13,12 +15,41 @@ void Page::readPage(const std::string& filename)
     this->filename = std::filesystem::path(filename).filename().replace_extension("").string();
 
     auto [mdContent, tomlContent] = extractTomlAndMarkdown(filename);
-    getMetadata(tomlContent);
+    setMetadata(tomlContent);
+    markdownToHtml(mdContent);
+}
+
+
+void Page::markdownToHtml(const std::string& md)
+{
+    std::string html;
+
+    // Callback to receive HTML output from md_html()
+    auto callback = [](const MD_CHAR* text, MD_SIZE size, void* userdata) {
+        auto* out = static_cast<std::string*>(userdata);
+        out->append(text, size);
+    };
+
+    const int result = md_html(
+        md.c_str(), md.size(),
+        callback, &html,
+        // Parser flags (can OR multiple)
+        MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH | MD_FLAG_TASKLISTS,
+        // Renderer flags (can OR multiple)
+        MD_HTML_FLAG_SKIP_UTF8_BOM
+    );
+
+    if (result != 0) {
+        throw std::runtime_error("md_html failed to convert markdown to HTML.");
+    }
+
+    htmlContent = html;
 }
 
 
 
-void Page::getMetadata(const std::string &tomlContent)
+
+void Page::setMetadata(const std::string &tomlContent)
 {
     std::istringstream ss(tomlContent);
     cpptoml::parser p{ss};

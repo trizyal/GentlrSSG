@@ -9,4 +9,4 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/external
 )
 
-target_link_libraries(gentlr_lib PUBLIC md4c)
+target_link_libraries(gentlr_lib PUBLIC md4c md4c-html)
