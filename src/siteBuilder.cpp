@@ -6,7 +6,7 @@
 
 #define PATH_MAX 4096
 
-std::string SiteBuilder::rootPath = "";
+
 
 void SiteBuilder::buildSite(const Config& config)
 {
@@ -18,11 +18,39 @@ void SiteBuilder::buildSite(const Config& config)
     rootPath.append("/");
 
     checkPaths(config);
+    readPages(config);
+
+    std::cout << "Pages: " << pages.size() << std::endl;
+    for (const auto& [filename, page] : pages)
+    {
+        std::cout << "Page: " << filename << ", Title: " << page.title << std::endl;
+    }
+}
+
+
+void SiteBuilder::readPages(const Config& config)
+{
+    // Iterate through all files in the pages directory
+    for (const auto& entry : std::filesystem::directory_iterator(rootPath + config.pagesPath))
+    {
+        if (entry.is_regular_file() && entry.path().extension() == ".md")
+        {
+            Page page;
+            page.readPage(entry.path());
+            pages[page.filename] = page;
+        }
+    }
+
+    // Check if any pages were found
+    if (pages.empty())
+    {
+        throw std::runtime_error("No pages found in the specified directory: " + config.pagesPath);
+    }
 }
 
 
 
-int SiteBuilder::checkPaths(const Config& config)
+void SiteBuilder::checkPaths(const Config& config) const
 {
     // Check if the pages path exists
     if (!std::filesystem::exists(rootPath + config.pagesPath))
@@ -37,8 +65,11 @@ int SiteBuilder::checkPaths(const Config& config)
     // Check if the templates path exists
     if (!std::filesystem::exists(rootPath + config.templatesPath))
     {
-        std::cerr << "Templates path does not exist: " << config.templatesPath << std::endl;
-        return 1;
+        throw std::filesystem::filesystem_error(
+        "Directory not found",
+        rootPath + config.templatesPath,
+        std::make_error_code(std::errc::no_such_file_or_directory)
+        );
     }
 
     // Check if the site path exists, create it if it doesn't
@@ -47,6 +78,4 @@ int SiteBuilder::checkPaths(const Config& config)
         std::filesystem::create_directories(rootPath + config.sitePath);
         std::cout << "Created site path: " << rootPath + config.sitePath << std::endl;
     }
-
-    return 0;
 }

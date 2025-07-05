@@ -40,7 +40,7 @@ void Config::printConfig() const
 }
 
 
-
+/// @brief Load configuration from a TOML file.
 int Config::loadConfig(const std::string& configPath)
 {
     const auto config = cpptoml::parse_file(configPath);
@@ -57,8 +57,10 @@ int Config::loadConfig(const std::string& configPath)
         this->author.email = *author->get_as<std::string>("email");
 
         // Get array of tables (socials)
-        if (const auto socials = author->get_table_array("socials")) {
-            for (const auto& entry : *socials) {
+        if (const auto socials = author->get_table_array("socials"))
+        {
+            for (const auto& entry : *socials)
+            {
                 Link socialLink;
                 socialLink.label = *entry->get_as<std::string>("label");
                 socialLink.url = *entry->get_as<std::string>("url");
@@ -69,31 +71,26 @@ int Config::loadConfig(const std::string& configPath)
     }
 
     // paths
-    if (const auto paths_tbl = config->get_table("paths")) {
-        // add ../ before the paths to make them relative to the config file
+    if (const auto paths_tbl = config->get_table("paths"))
+    {
         this->pagesPath = *paths_tbl->get_as<std::string>("pages");
-        // if (!this->pagesPath.starts_with("../")) {
-        //     this->pagesPath = "../" + this->pagesPath;
-        // }
         this->templatesPath = *paths_tbl->get_as<std::string>("templates");
-        // if (!this->templatesPath.starts_with("../")) {
-        //     this->templatesPath = "../" + this->templatesPath;
-        // }
         this->sitePath = *paths_tbl->get_as<std::string>("output");
-        // if (!this->sitePath.starts_with("../")) {
-        //     this->sitePath = "../" + this->sitePath;
-        // }
     }
 
     // template / theme
-    if (const auto template_tbl = config->get_table("template")) {
+    if (const auto template_tbl = config->get_table("template"))
+    {
         this->theme = *template_tbl->get_as<std::string>("theme");
     }
 
     // navigation links
-    if (const auto nav_tbl = config->get_table("nav")) {
-        if (const auto nav_links = nav_tbl->get_table_array("links")) {
-            for (const auto& link : *nav_links) {
+    if (const auto nav_tbl = config->get_table("nav"))
+    {
+        if (const auto nav_links = nav_tbl->get_table_array("links"))
+        {
+            for (const auto& link : *nav_links)
+            {
                 Navigation navLink;
                 navLink.label = *link->get_as<std::string>("label");
                 navLink.url = *link->get_as<std::string>("url");

@@ -1,16 +1,22 @@
 #ifndef SITEBUILDER_HPP
 #define SITEBUILDER_HPP
 
+#include <unordered_map>
+
 #include "config.hpp"
+#include "page.hpp"
 
 class SiteBuilder
 {
 public:
-    static std::string rootPath;
+    std::string rootPath;
+    std::unordered_map<std::string, Page> pages;
 
-    static void buildSite(const Config& config);
+    void buildSite(const Config& config);
 
-    static int checkPaths(const Config& config);
+    void checkPaths(const Config& config) const;
+    void readPages(const Config& config);
+
 };
 
 #endif //SITEBUILDER_HPP

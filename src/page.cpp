@@ -4,63 +4,60 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cpptoml/cpptoml.h>
 
 
-/// @brief Reads a Markdown file and extracts the title and content.
-int Page::readPageMarkdown(const std::string& filename)
+
+void Page::readPage(const std::string& filename)
+{
+    this->filename = std::filesystem::path(filename).filename().replace_extension("").string();
+
+    auto [mdContent, tomlContent] = extractTomlAndMarkdown(filename);
+    getMetadata(tomlContent);
+}
+
+
+
+void Page::getMetadata(const std::string &tomlContent)
+{
+    std::istringstream ss(tomlContent);
+    cpptoml::parser p{ss};
+    const auto metaData = p.parse();
+
+    this->title = *metaData->get_as<std::string>("title");
+    this->description = *metaData->get_as<std::string>("description");
+    this->layout = *metaData->get_as<std::string>("layout");
+    this->date = *metaData->get_as<std::string>("date");
+    this->permalink = *metaData->get_as<std::string>("permalink");
+}
+
+
+
+std::pair<std::string, std::string> Page::extractTomlAndMarkdown(const std::string& filename)
 {
     std::ifstream file(filename);
-    std::string line, title, content;
-    std::ostringstream body;
+    std::string line;
+    std::ostringstream toml, md;
+    enum {NONE, TOML, MARKDOWN} state = NONE;
 
     if (!file.is_open())
     {
         throw std::runtime_error("File not found or cannot be opened: " + filename);
     }
 
-    bool firstLine = true;
     while (std::getline(file, line))
     {
-        if (firstLine)
+        if (line == "+++")
         {
-            title = line;
-            firstLine = false;
+            if (state == NONE) {state = TOML;}
+            else if (state == TOML) {state = MARKDOWN;}
+            continue;
         }
-        else
-        {
-            body << line << "\n";
-        }
+        if (state == TOML) {toml << line << "\n";}
+        else if (state == MARKDOWN) {md << line << "\n";}
     }
 
-    if (title.empty())
-    {
-        this ->title = "";
-    }
-    else
-    {
-        // Remove leading and trailing whitespace from the title
-        title.erase(0, title.find_first_not_of(" \t"));
-        title.erase(title.find_last_not_of(" \t") + 1);
-        this->title = title;
-    }
-
-    if (body.str().empty())
-    {
-        this->content = "";
-    }
-    else
-    {
-        // Remove leading and trailing whitespace from the content
-        std::string bodyContent = body.str();
-        bodyContent.erase(0, bodyContent.find_first_not_of(" \t"));
-        bodyContent.erase(bodyContent.find_last_not_of(" \t") + 1);
-        this->content = bodyContent;
-    }
-
-    // Extract the filename without the extension or path
-    this->filename = std::filesystem::path(filename).filename().replace_extension("").string();
-
-    std::cout << "Read page: " << this->filename << std::endl;
-
-    return 0;
+    return std::make_pair(md.str(), toml.str());
 }
+
+

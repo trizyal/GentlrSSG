@@ -11,10 +11,11 @@ int main()
         // Load the configuration file
         Config config;
         config.loadConfig("../config.toml");
-        config.printConfig();
+        // config.printConfig();
 
         // Read pages
-        SiteBuilder::buildSite(config);
+        SiteBuilder siteBuilder;
+        siteBuilder.buildSite(config);
     }
     catch (const std::filesystem::filesystem_error& e)
     {
