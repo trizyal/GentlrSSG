@@ -4,7 +4,6 @@
 #include <unordered_map>
 
 #include "config.hpp"
-#include "htmlTemplate.hpp"
 #include "page.hpp"
 
 class SiteBuilder
@@ -13,12 +12,19 @@ public:
     std::string rootPath;
 
     std::unordered_map<std::string, Page> pages;
-    std::unordered_map<std::string, htmlTemplate> htmlTemplates;
+
+    // htmlTemplates["layout"] = htmlTemplateString
+    std::unordered_map<std::string, std::string> htmlTemplates;
 
     void buildSite(const Config& config);
 
     void checkPaths(const Config& config) const;
-    void readPages(const Config& config);
+
+    void readTemplates(const std::string& path);
+    static std::string getTemplateFromFile(const std::string& string);
+
+
+    void readPages(const std::string& path);
 
 };
 

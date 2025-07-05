@@ -1,6 +1,7 @@
 #include "siteBuilder.hpp"
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 
 #ifdef _WIN32
@@ -26,15 +27,18 @@ void SiteBuilder::buildSite(const Config& config)
     const std::filesystem::path exe_path = std::string(result, (count > 0) ? count : 0);
 
     rootPath = exe_path.parent_path().parent_path().string();
-
+    std::string templatePath = config.templatesPath;
 #ifdef _WIN32
     rootPath.append("\\");
+    chosenThemePath.append("\\");
 #else
     rootPath.append("/");
+    templatePath.append("/");
 #endif
 
     checkPaths(config);
-    readPages(config);
+    readTemplates(templatePath + config.theme);
+    readPages(config.pagesPath);
 
     std::cout << "Pages: " << pages.size() << std::endl;
     for (const auto& [filename, page] : pages)
@@ -44,10 +48,52 @@ void SiteBuilder::buildSite(const Config& config)
 }
 
 
-void SiteBuilder::readPages(const Config& config)
+void SiteBuilder::readTemplates(const std::string& path)
+{
+    // Iterate through all files in the templates directory
+    for (const auto& entry : std::filesystem::directory_iterator(rootPath + path))
+    {
+        if (entry.is_regular_file() && entry.path().extension() == ".html")
+        {
+            std::string layoutName = entry.path().filename().replace_extension("").string();
+            std::string htmlTemplate = getTemplateFromFile(entry.path().string());
+            htmlTemplates[layoutName] = htmlTemplate;
+        }
+    }
+
+    std::cout << "Templates: " << htmlTemplates.size() << std::endl;
+    for (const auto& [layoutName, templateContent] : htmlTemplates)
+    {
+        std::cout << "Template: " << layoutName << std::endl;
+        std::cout << templateContent << std::endl;
+    }
+
+    // Check if any templates were found
+    if (htmlTemplates.empty())
+    {
+        throw std::runtime_error("No templates found in the specified directory: " + path);
+    }
+}
+
+
+
+std::string SiteBuilder::getTemplateFromFile(const std::string& path)
+{
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open template file: " + path);
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();  // Read the entire file into buffer
+    return buffer.str();     // Return as a string
+}
+
+
+void SiteBuilder::readPages(const std::string& path)
 {
     // Iterate through all files in the pages directory
-    for (const auto& entry : std::filesystem::directory_iterator(rootPath + config.pagesPath))
+    for (const auto& entry : std::filesystem::directory_iterator(rootPath + path))
     {
         if (entry.is_regular_file() && entry.path().extension() == ".md")
         {
@@ -60,7 +106,7 @@ void SiteBuilder::readPages(const Config& config)
     // Check if any pages were found
     if (pages.empty())
     {
-        throw std::runtime_error("No pages found in the specified directory: " + config.pagesPath);
+        throw std::runtime_error("No pages found in the specified directory: " + path);
     }
 }
 

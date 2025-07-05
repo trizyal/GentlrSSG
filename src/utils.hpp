@@ -10,13 +10,13 @@ struct Site
 {
     std::string name;
     std::string description;
-    std::string logoPath;
+    std::string logoPath; // optional logo
 };
 
 struct Link
 {
-    std::string url;
     std::string label;
+    std::string url;
     std::string icon; // Optional icon
 };
 
