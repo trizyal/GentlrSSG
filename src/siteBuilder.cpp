@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <regex>
 #include <sstream>
 
 #ifdef _WIN32
@@ -40,13 +41,94 @@ void SiteBuilder::buildSite(const Config& config)
     checkPaths(config);
     readTemplates(templatePath + config.theme);
     readPages(config.pagesPath);
+    // Process each page with the templates
+
 
     std::cout << "Pages: " << pages.size() << std::endl;
     for (const auto& [filename, page] : pages)
     {
-        std::cout << "Page: " << filename << ", Title: " << page.title << std::endl;
+        // Check if the layout exists in the templates
+        auto it = htmlTemplates.find(page.layout);
+        if (it != htmlTemplates.end())
+        {
+            std::string htmlContent = it->second; // Get the template content
+            // Replace placeholders in the template with page content
+            htmlContent = std::regex_replace(htmlContent, std::regex(R"(\{\{ title \}\})"), page.title);
+            htmlContent = std::regex_replace(htmlContent, std::regex(R"(\{\{ tagline \}\})"), page.description);
+            htmlContent = std::regex_replace(htmlContent, std::regex(R"(\{\{ content \}\})"), page.htmlContent);
+
+            // Write the processed HTML to a file in the site directory
+            std::ofstream outFile(rootPath + "/" + config.sitePath + "/" + filename + ".html");
+            if (outFile.is_open())
+            {
+                outFile << htmlContent;
+                outFile.close();
+                std::cout << "Generated: " << filename << ".html" << std::endl;
+            }
+            else
+            {
+                throw std::runtime_error("Failed to write HTML file: " + filename + ".html");
+            }
+        }
+        else
+        {
+            throw std::runtime_error("Layout not found for page: " + filename);
+        }
+    }
+
+    copyTemplateAssets(config);
+}
+
+
+
+void SiteBuilder::copyTemplateAssets(const Config& config)
+{
+    std::string templatePath = rootPath + config.templatesPath + "/" + config.theme;
+    std::string destinationPath = rootPath + config.sitePath;
+
+    // copy the css and js directories
+    std::filesystem::path cssSource = templatePath + "/css";
+    std::filesystem::path jsSource = templatePath + "/js";
+    std::filesystem::path cssDestination = destinationPath + "/css";
+    std::filesystem::path jsDestination = destinationPath + "/js";
+    try
+    {
+        // Create destination directories if they don't exist
+        std::filesystem::create_directories(cssDestination);
+        std::filesystem::create_directories(jsDestination);
+
+        // Copy CSS files
+        for (const auto& entry : std::filesystem::directory_iterator(cssSource))
+        {
+            if (entry.is_regular_file())
+            {
+                std::filesystem::copy(entry.path(),
+                    cssDestination / entry.path().filename(),
+                    std::filesystem::copy_options::overwrite_existing);
+            }
+        }
+
+        // Copy JS files
+        for (const auto& entry : std::filesystem::directory_iterator(jsSource))
+        {
+            if (entry.is_regular_file())
+            {
+                std::filesystem::copy(entry.path(),
+                    jsDestination / entry.path().filename(),
+                    std::filesystem::copy_options::overwrite_existing
+);
+            }
+        }
+
+        std::cout << "Assets copied successfully." << std::endl;
+    }
+    catch (const std::exception& e)
+    {
+        throw std::runtime_error("Failed to copy template assets: " + std::string(e.what()));
     }
 }
+
+
 
 
 void SiteBuilder::readTemplates(const std::string& path)
@@ -63,11 +145,6 @@ void SiteBuilder::readTemplates(const std::string& path)
     }
 
     std::cout << "Templates: " << htmlTemplates.size() << std::endl;
-    for (const auto& [layoutName, templateContent] : htmlTemplates)
-    {
-        std::cout << "Template: " << layoutName << std::endl;
-        std::cout << templateContent << std::endl;
-    }
 
     // Check if any templates were found
     if (htmlTemplates.empty())
@@ -75,6 +152,7 @@ void SiteBuilder::readTemplates(const std::string& path)
         throw std::runtime_error("No templates found in the specified directory: " + path);
     }
 }
+
 
 
 

@@ -28,7 +28,6 @@ class Page
     static std::pair<std::string, std::string> extractTomlAndMarkdown(const std::string& filename);
     void setMetadata(const std::string &tomlContent);
     void markdownToHtml(const std::string& md);
-
 };
 
 #endif //PAGE_HPP

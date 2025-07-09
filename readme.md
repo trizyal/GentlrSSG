@@ -18,3 +18,6 @@
 - [x] Metadata extraction
 - [ ] Pagination
 - [ ] Customizable metadata
+
+
+![img.png](readme/img.png)

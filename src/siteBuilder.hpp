@@ -26,6 +26,8 @@ public:
 
     void readPages(const std::string& path);
 
+    void copyTemplateAssets(const Config& config);
+
 };
 
 #endif //SITEBUILDER_HPP
